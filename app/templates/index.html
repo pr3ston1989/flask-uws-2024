@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Calendar</title>
+    <script
+      src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"
+      defer
+    ></script>
+    <script src="../static/js/script.js" defer></script>
+  </head>
+  <body>
+    <div id="calendar"></div>
+
+    <script>
+      const eventsData = {{ basic_info | tojson }};
+    </script>
+  </body>
+</html>
