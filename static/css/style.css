@@ -4,7 +4,7 @@ body {
   max-width: 1440px;
   background-color: #e1f0da;
   margin: auto;
-  padding: 4rem;
+  padding: 0 4rem;
 }
 
 td,
@@ -32,7 +32,32 @@ dialog {
 ul {
   padding: 0;
   list-style: none;
+}
+
+ul.tags {
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+#header {
+  height: 5rem;
+  margin-bottom: 4rem;
+  background-color: #99bc85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+#header ul li a {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+a:hover {
+  color: darkslategray;
 }

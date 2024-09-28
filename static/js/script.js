@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     eventDidMount: function (info) {
       info.el.setAttribute("title", `${info.event.title}\n\n${info.event.extendedProps.short_description}`)
-      console.log(info.event);
     },
     events: [],
     eventClick: function (info) {
@@ -22,19 +21,35 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   });
   calendar.render();
-
   calendar.addEventSource(eventsData);
+  function changeCalendarView() {
+    if (window.innerWidth < 1024) {
+      calendar.changeView('timeGridDay')
+    } else {
+      calendar.changeView('dayGridMonth')
+    }
+  }
+  
+  window.addEventListener('resize', changeCalendarView)
 });
 
-function changeDialogContent(data) {
 
+
+const dialog = document.querySelector("dialog")
+const dialogCloseBtn = document.getElementById('close-dialog')
+
+function changeDialogContent(data) {
   const dialogDiv = document.querySelector(".event-info");
   dialogDiv.innerHTML = data
-  const dialog = document.querySelector("dialog")
   dialog.showModal();
 }
 
-document.getElementById('close-dialog').addEventListener("click", (e) => {
+dialogCloseBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  document.querySelector("dialog").close();
+  dialog.close();
 });
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape')
+    dialog.close()
+})

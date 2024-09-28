@@ -2,6 +2,7 @@ from flask import Flask, render_template, abort
 import requests
 from dotenv import load_dotenv
 import os
+import re
 
 load_dotenv()
 
@@ -9,6 +10,14 @@ api_url = "https://rekrutacja.teamwsuws.pl/events/"
 
 
 app = Flask(__name__)
+
+# Funkcja zamieniająca url na anchor tagi.
+def url_to_anchor(text):
+    pattern = r'(https?://[^\s]+)'
+    def replace(match):
+        url = match.group(0)
+        return f'<a href="{url}">{url}</a>'
+    return re.sub(pattern, replace, text)
 
 
 # Funkcja pobierająca dane z API.
@@ -40,6 +49,16 @@ def events_basic_info(events_data):
         basic_info.append(current_event)
     return basic_info
 
+# Funkcja formatująca dane z API do wyświetlenia na stronie.
+def format_data(data):
+    data['date'] = data['start_time'].split('T')[0]
+    data['time'] = data['start_time'].split('T')[1]
+    data['long_description'] = url_to_anchor(data['long_description'])
+    data['long_description'] = data['long_description'].replace('\n', '<br>')
+    data['long_description'] = data['long_description'].strip('"')
+    data['long_description'] = data['long_description'].replace('""', '"')
+    return data
+
 # Ścieżka wyświetlająca kalendarz ze wszystkimi wydarzeniami zwróconymi przez API.
 @app.route("/")
 def home():
@@ -53,12 +72,10 @@ def home():
 def get_event_details(event_id):
     event_url = f'{api_url}{event_id}'
     more_info = fetch_events_data(event_url)
-    print(more_info)
     if not more_info:
-        abort(404, description="Wydarzenie nie istnieje.")
+        abort(404, description="Wydarzenie nie istnieje.")   
+    more_info = format_data(more_info) 
 
-    more_info['date'] = more_info['start_time'].split('T')[0]
-    more_info['time'] = more_info['start_time'].split('T')[1]
     return render_template("event_dialog.html", more_info=more_info)
 
 # Ścieżka wyświetlająca kalendarz z wydarzeniami oznaczonymi konkretnym tagiem.

@@ -1,5 +1,5 @@
 import pytest
-from app import app, events_basic_info
+from app import app, events_basic_info, format_data, url_to_anchor
 
 @pytest.fixture
 def client():
@@ -63,3 +63,18 @@ def test_get_event_details_not_found(client):
 def test_get_events_by_tag_not_found(client):
      response = client.get("/tag/nieistniejacy_tag")
      assert response.status_code == 500
+
+def test_format_data():
+     data = {
+             'start_time': '2024-10-12T13:00:00',
+             'long_description': '''"Mamy zaszczyt ogłosić, że kolejna edycja naszego prestiżowego konkursu ortograficznego ""Dyktando Siedleckie"" już niedługo!📝'''}
+     
+     result = format_data(data)
+     assert result['date'] == '2024-10-12'
+     assert result['time'] == '13:00:00'
+     assert result['long_description'] == '''Mamy zaszczyt ogłosić, że kolejna edycja naszego prestiżowego konkursu ortograficznego "Dyktando Siedleckie" już niedługo!📝'''
+
+def test_url_to_anchor():
+    text = 'https://wydarzenia.uws.edu.pl/\n'
+    result = url_to_anchor(text)
+    assert result == '<a href="https://wydarzenia.uws.edu.pl/">https://wydarzenia.uws.edu.pl/</a>\n'
