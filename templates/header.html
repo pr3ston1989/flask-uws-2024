@@ -8,13 +8,9 @@
       src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"
       defer
     ></script>
-    <script src="../static/js/script.js" defer></script>
-  </head>
-  <body>
-    <div id="calendar"></div>
+    <script src='{{ url_for("static", filename="js/script.js") }}' defer></script>
 
-    <script>
-      const eventsData = {{ basic_info | tojson }};
-    </script>
-  </body>
-</html>
+    <link rel="stylesheet" href='{{ url_for("static", filename="css/style.css") }}' />
+  </head>
+
+  <body>

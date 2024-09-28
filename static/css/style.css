@@ -1,0 +1,24 @@
+body {
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1440px;
+  background-color: #e1f0da;
+  margin: auto;
+  padding: 4rem;
+}
+
+h1 {
+  
+}
+
+td,
+th {
+  background-color: #99bc85;
+}
+
+.fc-event:hover {
+  z-index: 10;
+  cursor: pointer;
+  background-color: blue;
+  border: blue;
+}

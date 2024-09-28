@@ -1,0 +1,14 @@
+{% include 'header.html' %}
+
+    <h1>Wszystkie wydarzenia:</h1>
+    <div id="calendar"></div>
+    <dialog>
+      <button autofocus>Zamknij</button>
+      <p id="event-title"></p>
+      <p id="event-description"></p>
+    </dialog>
+    <script>
+      const eventsData = {{ basic_info | tojson }};
+    </script>
+
+{% include 'footer.html' %}
