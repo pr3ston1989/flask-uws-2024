@@ -3,18 +3,21 @@ document.addEventListener("DOMContentLoaded", function () {
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth",
     locale: "pl",
+    eventTimeFormat: {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      omitZeroMinute: false,
+    },
     eventDidMount: function (info) {
       info.el.setAttribute("title", info.event.title);
     },
     events: [],
     eventClick: function (info) {
       const eventId = info.event.id;
-      console.log(eventId);
       fetch(`/event/${eventId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          changeDialogContent(data);
-        });
+        .then((response) => response.text())
+        .then(data => changeDialogContent(data));
     },
   });
   calendar.render();
@@ -23,17 +26,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function changeDialogContent(data) {
-  const dialog = document.querySelector("dialog");
-  const title = document.getElementById("event-title");
-  const description = document.getElementById("event-description");
 
-  title.textContent = data.name;
-  description.textContent = data.long_description;
-
+  const dialogDiv = document.querySelector(".event-info");
+  dialogDiv.innerHTML = data
+  const dialog = document.querySelector("dialog")
   dialog.showModal();
 }
 
-document.querySelector("dialog button").addEventListener("click", (e) => {
+document.getElementById('close-dialog').addEventListener("click", (e) => {
   e.preventDefault();
   document.querySelector("dialog").close();
 });

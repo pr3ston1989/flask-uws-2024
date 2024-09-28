@@ -26,7 +26,8 @@ def events_basic_info(events_data):
         current_event = {
             'id': event['id'],
             'title': event['name'],
-            'start': event['start_time'].split('T')[0],
+            'start': event['start_time'],
+            'duration': f"{event['duration']}0:00:00"
         }
         basic_info.append(current_event)
     return basic_info
@@ -38,13 +39,25 @@ app = Flask(__name__)
 def home():
     events_data = fetch_events_data(api_url)
     basic_info = events_basic_info(events_data)
-    return render_template("index.html", basic_info=basic_info)
+    events_selection = "Wszystkie wydarzenia:"
+    return render_template("index.html", basic_info=basic_info, events_selection=events_selection)
 
 @app.route("/event/<int:event_id>")
 def get_event_details(event_id):
     event_url = f'{api_url}{event_id}'
     more_info = fetch_events_data(event_url)
-    return more_info
+    more_info['date'] = more_info['start_time'].split('T')[0]
+    more_info['time'] = more_info['start_time'].split('T')[1]
+    return render_template("event_dialog.html", more_info=more_info)
+
+@app.route("/tag/<tag>")
+def get_events_by_tag(tag):
+    tag_url = f'{api_url}filter/?tag={tag}'
+    events_data = fetch_events_data(tag_url)
+    basic_info = events_basic_info(events_data)
+    events_selection = f'Wydarzenia oznaczone tagiem "{tag}":'
+    return render_template("index.html", basic_info=basic_info, events_selection=events_selection)
+
 
 
 

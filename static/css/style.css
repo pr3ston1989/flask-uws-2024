@@ -7,10 +7,6 @@ body {
   padding: 4rem;
 }
 
-h1 {
-  
-}
-
 td,
 th {
   background-color: #99bc85;
@@ -21,4 +17,22 @@ th {
   cursor: pointer;
   background-color: blue;
   border: blue;
+}
+
+dialog {
+  max-width: 1200px;
+  height: 80vh;
+}
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }

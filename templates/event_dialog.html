@@ -1,0 +1,22 @@
+
+    <h2>{{ more_info.name }}</h2>
+    <img src="https://rekrutacja.teamwsuws.pl/{{ more_info.image_url }}" alt="plakat wydarzenia" class="event-poster">
+    <h3>{{ more_info.location }}</h3>
+    <p>
+        Data: {{ more_info.date }} <br>
+        Godzina: {{ more_info.time }}
+    </p>
+    <p>{{ more_info.long_description }}</p>
+
+    <a href="{{ more_info.registration_link }}">Rejestracja</a>
+
+    <ul>
+        <p><strong>Tagi: </strong></p>  
+    {% for tag in more_info.tags %}
+        
+        <li>
+            <a href="{{ url_for('get_events_by_tag', tag=tag.name) }}">{{ tag.name }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+
