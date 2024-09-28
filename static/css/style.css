@@ -15,8 +15,7 @@ th {
 .fc-event:hover {
   z-index: 10;
   cursor: pointer;
-  background-color: blue;
-  border: blue;
+  background-color: #D4E7C5;
 }
 
 dialog {
@@ -31,6 +30,7 @@ dialog {
 }
 
 ul {
+  padding: 0;
   list-style: none;
   display: flex;
   gap: 1rem;
