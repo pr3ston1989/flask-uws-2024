@@ -1,32 +1,91 @@
-body {
-  font-size: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 1440px;
-  background-color: #e1f0da;
-  margin: auto;
-  padding: 0 4rem;
+@font-face {
+  font-family: 'Roboto Flex';
+  src: url('../fonts/RobotoFlex-Regular.woff2') format('woff2'),
+    url('../fonts/RobotoFlex-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-td,
-th {
-  background-color: #99bc85;
+
+
+:root {
+  font-family: 'Roboto Flex', Tahoma, Geneva, Verdana, sans-serif;
+  --cal-cell-color: #FADFA1;
+  --cal-header-color: #C96868;
+  --bg-color: #7EACB5;  
 }
+
+body {
+  margin: 0;  
+  background-color: var(--bg-color);
+}
+
+.content {
+  max-width: 75%;
+  margin: auto;
+  padding-bottom: 4rem;
+}
+
 
 .fc-event:hover {
-  z-index: 10;
   cursor: pointer;
   background-color: #D4E7C5;
 }
 
+.fc-col-header-cell {
+  background-color: var(--cal-header-color);
+}
+
+
+td,
+.fc-scroller {
+  background-color: var(--cal-cell-color);
+}
+
+@media (max-width: 600px) {
+  .fc-header-toolbar {
+    flex-direction: column;
+  }
+}
+
 dialog {
-  max-width: 1200px;
-  height: 80vh;
+  max-width: 90vw;
+  max-height: 90vh;
+  background-color: var(--cal-cell-color);
+}
+
+dialog button {
+  margin: 1rem;
 }
 
 .event-info {
   display: flex;
   flex-direction: column;
+  margin: 1rem;
+}
 
+#header,
+#footer {
+  background-color: var(--cal-cell-color);
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#header {
+  margin-bottom: 4rem;
+  box-shadow: 0px -15px 30px 5px rgba(0,0,0,0.6);
+}
+
+#footer {
+  margin-top: 4rem;
+  box-shadow: 0px 10px 30px 5px rgba(0,0,0,0.6);
+}
+
+a {
+  text-decoration: none;
 }
 
 ul {
@@ -35,29 +94,18 @@ ul {
 }
 
 ul.tags {
+  margin-top: 4rem;
+  margin-bottom: none;
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-#header {
-  height: 5rem;
-  margin-bottom: 4rem;
-  background-color: #99bc85;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-a {
-  text-decoration: none;
-}
-
 #header ul li a {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
 a:hover {
-  color: darkslategray;
+  color: var(--cal-header-color);
 }

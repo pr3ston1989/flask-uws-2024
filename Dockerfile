@@ -8,6 +8,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+RUN pytest
+
 EXPOSE 5000
 
 CMD ["flask", "run"]

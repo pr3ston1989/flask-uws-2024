@@ -1,12 +1,14 @@
 {% include 'header.html' %}
 
-    <h1> {{ events_selection }} </h1>
-    <div id="calendar"></div>
-    <dialog>
-      <button autofocus id="close-dialog">Zamknij</button>
-      <div class="event-info">
-      </div>
-    </dialog>
+    <div class="content">
+      <h1> {{ events_selection }} </h1>
+      <div id="calendar"></div>
+      <dialog>
+        <button autofocus id="close-dialog">Zamknij</button>
+        <div class="event-info">
+        </div>
+      </dialog>
+    </div>
     <script>
       const eventsData = {{ basic_info | tojson }};
     </script>
