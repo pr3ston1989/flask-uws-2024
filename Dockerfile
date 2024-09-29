@@ -8,8 +8,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN pytest
-
 EXPOSE 5000
 
-CMD ["flask", "run"]
+CMD ["flask", "run", "--debug", "--host=0.0.0.0"]

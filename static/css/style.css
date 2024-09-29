@@ -86,6 +86,16 @@ dialog button {
 
 a {
   text-decoration: none;
+  cursor: default;
+}
+
+a[href]:hover {
+  color: var(--cal-header-color);
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
 }
 
 ul {
@@ -97,6 +107,7 @@ ul.tags {
   margin-top: 4rem;
   margin-bottom: none;
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
 }
@@ -104,8 +115,4 @@ ul.tags {
 #header ul li a {
   font-size: 2rem;
   font-weight: 700;
-}
-
-a:hover {
-  color: var(--cal-header-color);
 }
