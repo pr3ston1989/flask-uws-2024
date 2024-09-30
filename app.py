@@ -3,6 +3,7 @@ import requests
 from dotenv import load_dotenv
 import os
 import re
+import zulu
 
 load_dotenv()
 
@@ -11,8 +12,11 @@ api_url = "https://rekrutacja.teamwsuws.pl/events/"
 
 app = Flask(__name__)
 
-# Funkcja zamieniająca url na anchor tagi.
 def url_to_anchor(text):
+    """
+    url_to_anchor jako argument przyjmuje dowolny tekst i zamienia w nim
+    wszystkie linki na anchor tagi prawidłowo wyświetlające się w HTML.
+    """
     pattern = r'(https?://[^\s]+)'
     def replace(match):
         url = match.group(0)
@@ -20,8 +24,11 @@ def url_to_anchor(text):
     return re.sub(pattern, replace, text)
 
 
-# Funkcja pobierająca dane z API.
 def fetch_events_data(url):
+    """
+    fetch_events_data przyjmuje link do endpointu i wysyła zapytanie do API,
+    następnie zwraca otrzymane dane w formacie JSON lub błąd.
+    """
     api_key = os.getenv('API_KEY')    
     headers = {
         'api-key': api_key,
@@ -34,42 +41,58 @@ def fetch_events_data(url):
         print(f"HTTP error occured: {http_error}")
         abort(500, description="Wystąpił błąd serwera, nie udało się pobrać danych z API.")
 
-# Funkcja formatująca dane dla wyświetlenia w FullCalendar.
 def events_basic_info(events_data):
+    """
+    events_basic_info przyjmuje jako argument dane zwrócone przez API.
+    Tworzy listę nowych słowników zawierających podstawowe dane
+    o wydarzeniach i odpowiednio je formatuje w celu automatycznego
+    wyświetlenia w FullCalendar.
+    """
+    default_datetime = str(zulu.now()).split('.')[0]
     basic_info = []
     for event in events_data:
-        current_event = {
-            'id': event['id'],
-            'title': event['name'],
-            'start': event['start_time'],
-            'short_description': event['short_description'],
-            # FullCalendar wymaga formatu HH:MM:SS dla czasu wydarzeń.
-            'duration': f"0{event['duration']}:00:00",
-        }
+        if event.get('id'):
+            current_event = {
+                'id': event['id'],
+                'title': event.get('name', 'Brak tytułu'),
+                'start': event.get('start_time', default_datetime),
+                'short_description': event.get('short_description', 'Brak opisu'),
+                # FullCalendar wymaga formatu HH:MM:SS dla czasu trwania wydarzeń.
+                'duration': f"{event.get('duration', 1)}:00:00",
+            }
         basic_info.append(current_event)
     return basic_info
 
-# Funkcja formatująca dane z API do wyświetlenia na stronie.
 def format_data(data):
-    data['date'] = data['start_time'].split('T')[0]
-    data['time'] = data['start_time'].split('T')[1]
-    data['long_description'] = url_to_anchor(data['long_description'])
+    """
+    format_data jako argument przyjmuje szczegółowe dane o konkretnym wydarzeniu.
+    Służy do formatowania danych z API do prawidłowego wyświetlenia w HTML.
+    Dzieli wejściowy czas rozpoczęcia na datę oraz godzinę (w przypadku braku tej informacji
+    zwraca domyślną wartość, jaką jest data i czas z momentu wysłania zapytania).
+    W szczegółowym opisie wydarzenia zamienia znaki nowej linii na tagi <br>,
+    usuwa zbędne cudzysłowy, a także zamienia linki na anchor tagi, po czym zwraca sformatowane dane.
+    """
+    default_datetime = str(zulu.now()).split('.')[0]
+    data['date'] = data.get('start_time', default_datetime).split('T')[0]
+    data['time'] = data.get('start_time', default_datetime).split('T')[1]
+    data['long_description'] = url_to_anchor(data.get('long_description', "Brak opisu."))
     data['long_description'] = data['long_description'].replace('\n', '<br>')
     data['long_description'] = data['long_description'].strip('"')
     data['long_description'] = data['long_description'].replace('""', '"')
     return data
 
-# Ścieżka wyświetlająca kalendarz ze wszystkimi wydarzeniami zwróconymi przez API.
 @app.route("/")
 def home():
+    """Ścieżka do strony głównej - wyświetla kalendarz ze wszystkimi wydarzeniami."""
     events_data = fetch_events_data(api_url)
     basic_info = events_basic_info(events_data)
     events_selection = "Wszystkie wydarzenia:"
     return render_template("index.html", basic_info=basic_info, events_selection=events_selection)
 
-# Ścieżka wypełnia szablon szczegółowymi informacjami o wydarzeniu.
+
 @app.route("/event/<int:event_id>")
 def get_event_details(event_id):
+    """Ścieżka do konretnego wydarzenia, wypełnia szablon danymi i zwraca HTML."""
     event_url = f'{api_url}{event_id}'
     more_info = fetch_events_data(event_url)
     if not more_info:
@@ -78,9 +101,10 @@ def get_event_details(event_id):
 
     return render_template("event_dialog.html", more_info=more_info)
 
-# Ścieżka wyświetlająca kalendarz z wydarzeniami oznaczonymi konkretnym tagiem.
+
 @app.route("/tag/<tag>")
 def get_events_by_tag(tag):
+    """Ścieżka do strony kalendarza wydarzeń dla konkretnego tagu."""
     tag_url = f'{api_url}filter/?tag={tag}'
     events_data = fetch_events_data(tag_url)
     if not events_data:
