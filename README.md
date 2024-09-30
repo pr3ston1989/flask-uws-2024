@@ -93,11 +93,11 @@ W poniższej komendzie wystarczy zamienić 'kluczAPI' dla zmiennej środowiskowe
 
 #### Windows:
 
-```docker run -d --name flask-app -e API_KEY=kluczAPI -p 5000:5000 dpietrzak89/flask-uws```
+```docker run -d --name twoja_nazwa_dla_kontenera -e API_KEY=kluczAPI -p 5000:5000 dpietrzak89/flask-uws```
 
 #### Linux:
 
-```sudo docker run -d --name flask-app -e API_KEY=kluczAPI -p 5000:5000 dpietrzak89/flask-uws```
+```sudo docker run -d --name twoja_nazwa_dla_kontenera -e API_KEY=kluczAPI -p 5000:5000 dpietrzak89/flask-uws```
 
 
 Aplikacja będzie dostępna na localhost pod [tym](http://127.0.0.1:5000/) adresem.
