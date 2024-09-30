@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const eventId = info.event.id;
       fetch(`/event/${eventId}`)
         .then((response) => response.text())
-        .then(data => changeDialogContent(data));
+        .then(data => changeDialogContent(data))
+        .catch(error => console.log('Error fetching data:', error));
     },
   });
   calendar.render();
